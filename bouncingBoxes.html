@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bouncing Boxes</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="1000" height="500"></canvas>
+    <script>
+      let canvas = document.getElementById("canvas");
+      let context = canvas.getContext("2d");
+      const box_count = 10;
+      const points = [];
+      for (let i = 0; i < box_count; ++i) {
+        points.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          width: Math.random() * 100,
+          height: Math.random() * 100,
+          xDelta: 1,
+          yDelta: 1,
+          color: `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
+        });
+      }
+      const draw = function () {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        points.forEach(function (current_box) {
+          context.fillStyle = current_box.color;
+          context.fillRect(current_box.x, current_box.y, current_box.width, current_box.height);
+          let turningPointX = current_box.x + current_box.width;
+          let turningPointY = current_box.y + current_box.height;
+          if (turningPointX >= canvas.width || current_box.x <= 0) {
+            current_box.xDelta *= -1;
+          }
+          if (turningPointY >= canvas.height || current_box.y <= 0) {
+            current_box.yDelta *= -1;
+          }
+          current_box.x += current_box.xDelta;
+          current_box.y += current_box.yDelta;
+        })
+      };
+      const animate = function () {
+        draw ();
+        setTimeout (animate, 10);
+      }
+      animate ();
+    </script>
+  </body>
+</html>
